@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:p="http://www.springframework.org/schema/p"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+	<bean name="plansHandleController" class="com.plans.controller.PlansHandleController">
+		<property name="message" value="定时程序已启动成功，启动信息。。。class=PlansHandleController/Method=plansHandle"></property>
+	</bean>
+
+	<bean name="plansHandleControllerBean"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="plansHandleController" />
+		<property name="targetMethod" value="plansHandle" />
+		<!--将并发设置为false-->  
+    	<property name="concurrent" value="false" />  
+	</bean>
+	<!-- 计划任务cronExpression-->
+	<bean name="simpleTriggerBean" class="org.springframework.scheduling.quartz.CronTriggerBean">
+	 
+	<!--定时 repeatInterval
+	<bean name="simpleTriggerBean" class="org.springframework.scheduling.quartz.SimpleTriggerBean">-->
+	
+		<!--这里定义定时任务的对象的位置 -->
+		<property name="jobDetail" ref="plansHandleControllerBean" />
+
+		<!--这里定义每六秒钟程序执行一次
+		<property name="repeatInterval" value="6000" />  -->
+		<!-- 每天晚上12点执行-->
+		<property name="cronExpression">
+			<value>0 0 2 * * ?</value>
+		</property> 
+		<!--这里定义程序启动20秒钟后开始执行 
+		<property name="startTime" value="2011-12-27 11:55:58"></property> -->
+	</bean>
+	<!--启动任务 -->
+	<bean name="schedulerFactoryBean"
+		class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
+		<property name="triggers">
+			<list>
+				<ref bean="simpleTriggerBean" />
+			</list>
+		</property>
+	</bean>
+</beans>

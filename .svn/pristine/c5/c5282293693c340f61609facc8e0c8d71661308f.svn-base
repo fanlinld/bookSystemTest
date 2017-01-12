@@ -1,0 +1,106 @@
+<!DOCTYPE HTML>
+<!--
+	Tessellate by HTML5 UP
+	html5up.net | @n33co
+	Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
+-->
+<html>
+<head>
+<title>乐辅通经营管理平台</title>
+<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+<meta name="description" content="" />
+<meta name="keywords" content="" />
+<!--[if lte IE 8]><script src="css/ie/html5shiv.js"></script><![endif]-->
+<script src="js/jquery.min.js"></script>
+<script src="js/jquery.scrolly.min.js"></script>
+<script src="js/skel.min.js"></script>
+<script src="js/init.js"></script>
+<script type="text/javascript" src="../js/MD5.js"></script>
+<script type="text/javascript" src="../js/util.js"></script>
+<link href="../images/favicon.ico" rel="shortcut icon">
+<noscript>
+	<link rel="stylesheet" href="css/skel.css" />
+	<link rel="stylesheet" href="css/style.css" />
+	<link rel="stylesheet" href="css/style-wide.css" />
+</noscript>
+<!--[if lte IE 8]><link rel="stylesheet" href="css/ie/v8.css" /><![endif]-->
+<!--[if lte IE 9]><link rel="stylesheet" href="css/ie/v9.css" /><![endif]-->
+</head>
+<body>
+
+	<!-- Header -->
+	<section id="header" class="dark">
+		<header>
+			<h1>欢迎来到乐辅通经营管理平台</h1>
+			<p>Welcome To LFT Management Platform</p>
+		</header>
+		<footer>
+			<a href="#first" class="button scrolly">点击登录</a>
+		</footer>
+	</section>
+
+	<!-- first -->
+	<section id="first" class="main">
+		<header>
+			<div class="container">
+				<h2>乐辅通智能教学平台</h2>
+				<p>
+					采用独特的人工智能技术，能够模拟优秀教师的思维自动解答学生不会的任 何数理化问题(课标范围内).对于学生不会的问题，不是简单的给一个答案，而是通过逐步提示、解后反思、巩固 练习、微课堂等功能一步一步引导学生独立完成，要想看详细 答案必须由家长输入监护密码，是学生自主学习的好工具，被誉为智能家教。
+				</p>
+			</div>
+		</header>
+		<div class="content style4 featured">
+			<div class="container 75%">
+				<form method="post" action="#">
+					<div class="row 50%">
+						<div class="6u">
+							<input id="userid" type="text" placeholder="账号" />
+						</div>
+						<div class="6u">
+							<input id="userpass" type="password" placeholder="密码" />
+						</div>
+					</div>
+					<div class="row">
+						<div class="12u">
+							<ul class="actions">
+								<li><input type="button" class="button" onclick="javascript:login();"
+									value="  登                 录     " /></li>
+							</ul>
+						</div>
+					</div>
+				</form>
+			</div>
+		</div>
+	</section>
+</body>
+<script type="text/javascript">
+	function login(){
+		var userId=$('#userid').val();
+		if(userId==null || userId==""){
+			alert('请输入用户名');
+			$("#userid").select();
+			return;
+		}
+		var userPass=$('#userpass').val();
+		if(userPass==null || userPass==""){
+			alert('请输入登录密码');
+			$("#userPass").select();
+			return;
+		}
+		var url="../user/login";
+		$.getJSON(url,{"userName":userId,"passWord":$.md5(userPass),"loginType":3},function(data){
+			if(data!=null){
+				if(data.success){
+					if(data.power=="4" || data.power=="15"){
+						location.href="../mini-spectral/userlist.jsp";
+					}else{
+						alert("您的账号不能登录");
+					}
+				}else{
+					alert(data.message);
+				}
+			}
+		})
+	}
+</script>
+</html>

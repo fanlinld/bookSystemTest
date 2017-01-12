@@ -1,0 +1,9 @@
+eclipse.preferences.version=1
+encoding//WebContent/page=UTF-8
+encoding//src/com=UTF-8
+encoding//src/com/book/service/BookServiceImpl.java=UTF-8
+encoding//src/com/menus/service/MenusServiceImpl.java=UTF-8
+encoding//src/com/roles/service/RolesServiceImpl.java=UTF-8
+encoding//src/com/user/service/UserServiceImpl.java=UTF-8
+encoding//src/com/util=UTF-8
+encoding/<project>=UTF-8

@@ -1,0 +1,350 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="book">
+	<!-- 查询一本图书信息 -->
+	<select id="selectOneBook" parameterType="book" resultType="book">
+		SELECT
+			id,
+			name
+		FROM
+			book
+		<where>
+			<if test="id!=null and id!=0">
+				AND id=#{id}
+			</if>
+		</where>
+		LIMIT 0,1
+	</select>
+
+	<!-- 查询图书列表信息 -->
+	<select id="selectbooksInfo" parameterType="book" resultType="book">
+		SELECT
+			id,
+			name,
+			english_name,
+			press,
+			revison,
+			(SELECT name FROM classify WHERE id=book.classify) AS classify ,
+			classify AS classifyid,
+			author,
+			translator,
+			image,
+			listing,
+			brand,
+			status,
+			buydate
+		FROM
+			book
+		<where>
+			<if test="source!=null">
+				AND source=#{source}
+			</if>
+			<if test="selbookName!=null and selbookName!=''">
+				AND name LIKE '%${selbookName}%'
+			</if>
+			<if test="selbookAuthor!=null and selbookAuthor!=''">
+				AND author LIKE '%${selbookAuthor}%' 
+			</if>
+			<if test="classifyid!=null and classifyid!=''">
+				AND classify=#{classifyid}
+			</if>
+			<if test="seltranslator!=null and seltranslator!=''">
+				AND translator  LIKE '%${seltranslator}%'
+			</if>
+			<if test="selpress!=null and selpress!=''">
+				AND press LIKE '%${selpress}%' 
+			</if>
+			<if test="sellisting!=null and sellisting!=''">
+				AND listing LIKE '%${sellisting}%' 
+			</if>
+			<if test="selbrand!=null and selbrand!=''">
+				AND brand LIKE '%${selbrand}%' 
+			</if>
+			<if test="name!=null and name!=''">
+				AND name=#{name}
+			</if>
+			<if test="id!=null and id!=0">
+				AND id=#{id}
+			</if>
+		</where>
+		ORDER BY
+		<if test="sort!=null and sort!='' and order!=null and order!=''">
+			${sort} ${order},
+		</if> id DESC
+		<if test="isShare==1">
+			LIMIT ${startIndex},${rows} 
+		</if>
+	</select>
+	
+	<select id="selectbooksInfoCount" parameterType="book" resultType="int">
+		SELECT
+			COUNT(1)
+		FROM
+			book
+		<where>
+			<if test="source!=null">
+				AND source=#{source}
+			</if>
+			<if test="status!=null">
+				AND status=#{status}
+			</if>
+			<if test="selbookName!=null and selbookName!=''">
+				AND name LIKE '%${selbookName}%'
+			</if>
+			<if test="selbookAuthor!=null and selbookAuthor!=''">
+				AND author LIKE '%${selbookAuthor}%' 
+			</if>
+			
+			<if test="classifyid!=null and classifyid!=''">
+				AND classify=#{classifyid}
+			</if>
+			<if test="seltranslator!=null and seltranslator!=''">
+				AND translator  LIKE '%${seltranslator}%'
+			</if>
+			<if test="selpress!=null and selpress!=''">
+				AND press LIKE '%${selpress}%' 
+			</if>
+			<if test="sellisting!=null and sellisting!=''">
+				AND listing LIKE '%${sellisting}%' 
+			</if>
+			<if test="selbrand!=null and selbrand!=''">
+				AND brand LIKE '%${selbrand}%' 
+			</if>
+			<if test="name!=null and name!=''">
+				AND name=#{name}
+			</if>
+			<if test="id!=null and id!=0">
+				AND id=#{id}
+			</if>
+		</where>
+	</select>
+
+	
+	
+	<!-- 添加图书 -->
+	<insert id="insertBook" parameterType="book">
+		INSERT INTO book
+		(
+			name,
+			english_name,
+			press,
+			author,
+			translator,
+			revison,
+			classify,
+			buydate,
+			image,
+			listing,
+			brand,
+			status,
+			source
+		)
+		VALUES
+		(
+			#{name},
+			#{english_name},
+			#{press},
+			#{author},
+			#{translator},
+			#{revison},
+			#{classifyid},
+			#{buydate},
+			#{image},
+			#{listing},
+			#{brand},
+			#{status},
+			#{source}
+		)
+		<selectKey resultType="int" order="AFTER" keyProperty="id">
+			SELECT @@IDENTITY AS id
+		</selectKey>
+	</insert>
+	
+	<!-- 删除教材 -->
+	<delete id="deleteBook" parameterType="book">
+		DELETE FROM book WHERE id=#{id}
+	</delete>
+	
+	<!--更新教材信息 -->
+	<update id="updateBook" parameterType="book">
+		UPDATE book
+		<set>
+			<if test="name!=null and name!=''">
+				name=#{name},
+			</if>
+			<if test="english_name!=null">
+				english_name=#{english_name},
+			</if>
+			<if test="press!=null and press!=''">
+				press=#{press},
+			</if>
+			<if test="author!=null and author!=''">
+				author=#{author},
+			</if>
+			<if test="classifyid!=null and classifyid!=0">
+				classify=#{classifyid},
+			</if>
+			<if test="translator!=null">
+				translator=#{translator},
+			</if>
+			<if test="revison!=null">
+				revison=#{revison},
+			</if>
+			<if test="listing!=null">
+				listing=#{listing},
+			</if>
+			<if test="brand!=null">
+				brand=#{brand},
+			</if>
+			<if test="buydate!=null">
+				buydate=#{buydate},
+			</if>
+			<if test="status!=null">
+				status=#{status},
+			</if>
+			<if test="image!=null and image!=''">
+				image=#{image},
+			</if>
+		</set>
+		<where>
+			<if test="id!=null and id!=0">
+				id=#{id}
+			</if>
+		</where>
+	</update>
+	
+	<!--获得书籍类型 -->
+	<select id="getClassifyComeBox" parameterType="classify" resultType="classify">
+		SELECT 
+			id,
+			name
+		FROM
+			classify
+	</select>
+	<!--添加书籍类型 -->
+	<insert id="insertClassify" parameterType="classify">
+		INSERT INTO classify
+			(name)
+		VALUES
+			(#{name})
+	</insert>
+	<!--删除书籍类型 -->
+	<delete id="deleteClassify" parameterType="classify">
+		DELETE FROM classify WHERE id=#{id}
+	</delete>
+	
+	<!--查询读书笔记列表 -->
+	<select id="selectReadNotes" parameterType="readNote" resultType="readNote">
+		SELECT 
+			id,
+			createdate,
+			modifydate,
+			bookid,
+			(SELECT name FROM book WHERE id=readnote.bookid) AS bookname,
+			content,
+			title
+		FROM
+			readnote
+		WHERE
+			bookid=#{bookid}
+	</select>
+
+	<!--添加读书笔记 -->
+	<insert id="insertReadNote" parameterType="readNote" >
+		INSERT INTO readnote
+		(
+			title,
+			bookid,
+			createdate,
+			content
+		)
+		VALUES
+		(
+			#{title},
+			#{bookid},
+			#{createdate},
+			#{content}
+		)
+	</insert>
+	
+	<!--更新笔记 -->
+	<update id="updateReadNote" parameterType="readNote">
+		UPDATE 
+			readnote 
+		SET
+			title=#{title},
+			content=#{content},
+			modifydate=#{modifydate}
+		WHERE
+			id=#{id}
+	</update>
+	
+	<!--删除笔记 -->
+	<delete id="deleteBookNote" parameterType="readNote">
+		DELETE FROM readnote WHERE id=#{id}
+	</delete>
+	
+	<!--查询借阅记录-->
+	<select id="selectBorrowRecords" parameterType="borrowRecord" resultType="borrowRecord">
+		SELECT 
+			id,
+			borrow_person,
+			borrow_date,
+			return_date
+		FROM
+			borrow_record
+		WHERE
+			bookid=#{bookid}
+		ORDER BY id DESC
+	</select>
+	
+	<!--添加借阅记录 -->
+	<insert id="insertBorrowRecord" parameterType="borrowRecord" >
+		INSERT INTO borrow_record
+		(
+			bookid,
+			borrow_date,
+			borrow_person
+		)
+		VALUES
+		(
+			#{bookid},
+			#{borrow_date},
+			#{borrow_person}
+		)
+	</insert>
+	
+	<!--更新借阅记录-->
+	<update id="updateBorrowRecord" parameterType="borrowRecord">
+		UPDATE 
+			borrow_record 
+		SET
+			return_date=#{return_date}
+		WHERE
+			id=#{id}
+	</update>
+	
+	<!--删除借阅记录 -->
+	<delete id="deleteBorrowRecord" parameterType="borrowRecord">
+		DELETE FROM borrow_record WHERE id=#{id}
+	</delete>
+	
+	<select id="selectMyOutBooks" parameterType="outbook" resultType="outbook">
+		SELECT
+			book.`name` AS book_name,
+			book.id AS book_id,
+			borrow_record.borrow_date,
+			borrow_record.borrow_person
+		FROM
+			borrow_record,
+			book
+		WHERE
+			book.id = borrow_record.bookid
+			AND book.source = 0
+			AND borrow_record.return_date IS NULL
+		<if test="selbookName!=null and selbookName!=''">
+			AND book.name LIKE '%${selbookName}%'
+		</if>
+	</select>
+</mapper>

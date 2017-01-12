@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="menus">
+	<!--查询所有子菜单信息  -->
+	<select id="selectChildmenusInfo" parameterType="menus" resultType="menus">
+		SELECT
+			id,
+			name,
+			icon,
+			url,
+			pid,
+			sort
+		FROM
+			menu
+		WHERE
+			 pid>0
+		<if test="permission!=null and permission!=''">
+			AND id IN (${permission})
+		</if>
+		ORDER BY sort ASC
+	</select>
+	
+	<!--查询所有父菜单信息  -->
+	<select id="selectParsmenusInfo" parameterType="menus" resultType="menus">
+		SELECT
+			id,
+			name,
+			icon
+		FROM
+			menu
+		WHERE
+			 pid=0
+		<if test="permission!=null and permission!=''">
+			AND id IN (${permission})
+		</if>
+		ORDER BY sort ASC
+	</select>
+	
+	<!--查询所菜单信息  -->
+	<select id="selectAllmenusInfo" parameterType="menus" resultType="menus">
+		SELECT
+			id,
+			name,
+			icon,
+			url,
+			pid,
+			sort
+		FROM
+			menu
+		<where>
+			<if test="pid!=null and pid!=0">
+				AND pid=#{pid}
+			</if>
+		</where>
+		ORDER BY sort ASC
+	</select>
+	
+	<!--查菜单信息  -->
+	<select id="selectMenus" parameterType="menus" resultType="menus">
+		SELECT
+			id,
+			name,
+			icon,
+			url,
+			pid,
+			sort
+		FROM
+			menu
+		<where>
+			<if test="name!=null and name!=''">
+				name=#{name}
+			</if>
+			<if test="pid!=null and pid!=0">
+				AND pid=#{pid}
+			</if>
+		</where>
+		ORDER BY sort ASC
+	</select>
+	
+	<!--更新菜单信息  -->
+	<update id="updateMenus" parameterType="menus">
+		UPDATE menu
+		<set>
+			<if test="name!=null and name!=''">
+				name=#{name},
+			</if>
+			<if test="pid!=null">
+				pid=#{pid},
+			</if>
+			<if test="icon!=null and icon!=''">
+				icon=#{icon},
+			</if>
+			<if test="url!=null and url!=''">
+				url=#{url},
+			</if>
+			<if test="sort!=null and sort!=0">
+				sort=#{sort},
+			</if>
+		</set>
+		<where>
+			<if test="id!=null and id!=0">
+				id=#{id}
+			</if>
+		</where>
+	</update>
+	
+	<!-- 添加菜单信息 -->
+	<insert id="insertMenus" parameterType="menus">
+		INSERT INTO menu
+		(
+			name,
+			pid,
+			icon,
+			url,
+			sort
+		)
+		VALUES
+		(
+			#{name},
+			#{pid},
+			#{icon},
+			#{url},
+			#{sort}
+		)
+	</insert>
+
+	<!-- 删除学菜单信息 -->
+	<delete id="deleteMenus" parameterType="menus">
+		DELETE FROM menu WHERE id=#{id}
+	</delete>
+</mapper>

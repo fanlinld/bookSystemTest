@@ -1,0 +1,282 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="user">
+	<!-- 新增用户信息 -->
+	<insert id="insertUser" parameterType="user">
+		INSERT INTO user 
+		(
+			user_name,
+			password,
+			power,
+			phone,
+			qq,
+			create_time
+		)
+		VALUES
+		(
+			#{user_name},
+			#{password},
+			#{power},
+			#{phone},
+			#{qq},
+			#{create_time}
+		)
+		<selectKey resultType="int" order="AFTER" keyProperty="id">
+			SELECT @@IDENTITY AS id
+		</selectKey>
+	</insert>
+
+	<!-- 登录 -->
+	<select id="login" parameterType="user" resultType="user">
+		SELECT
+			id,
+			user_name,
+			password,
+			power,
+			phone,
+			qq,
+			create_time
+		FROM
+			user 
+		WHERE
+			user_name=#{number}
+	</select>
+	
+	
+	<!-- 检测用户名是否存在 -->
+	<select id="ckuser" parameterType="user" resultType="int" statementType="STATEMENT">
+		SELECT
+			COUNT(1)
+		FROM
+			user
+		WHERE
+			user_name='${user_name}'
+	</select>
+	
+	<!-- 查询单个用户信息 -->
+	<select id="selectUser" parameterType="user" resultType="user">
+		SELECT
+			id,
+			user_name,
+			password,
+			power,
+			phone,
+			qq,
+			create_time
+		FROM
+			user
+		<where>
+			<if test="id!=null and id!=0">
+				id=#{id}
+			</if>
+			<if test="user_name!=null and user_name!=''">
+				AND user_name=#{user_name}
+			</if>
+			<if test="qq!=null and qq!=''">
+				AND qq=#{qq}
+			</if>
+			<if test="power!=null and power!=''">
+				AND power=#{power}
+			</if>
+			
+			<if test="selUserName!=null and selUserName!=''">
+				AND user_name LIKE '%${selUserName}%'
+			</if>
+			<if test="selphone!=null and selphone!=''">
+				AND phone LIKE '%${selphone}%'
+			</if>
+			<if test="selqq!=null and selqq!=''">
+				AND qq LIKE '%${selqq}%'
+			</if>
+			<if test="number!=null and number!=''">
+				AND (user_name=#{number} OR qq=#{number} OR
+				phone=#{number})
+			</if>
+			<if test="phone!=null and phone!=''">
+				AND phone=#{phone}
+			</if>
+		</where>
+	</select>
+
+	<!-- 查询用户信息 -->
+	<select id="selectUsers" parameterType="user" resultType="user">
+		SELECT
+			id,
+			user_name,
+			password,
+			power,
+			phone,
+			qq,
+			create_time
+		FROM
+			user
+		<where>
+		       
+			<if test="id!=null and id!=0">
+				AND id=#{id}
+			</if>
+			<if test="user_name!=null and user_name!=''">
+				AND user_name=#{user_name}
+			</if>
+			<if test="qq!=null and qq!=''">
+				AND qq=#{qq}
+			</if>
+			<if test="power!=null and power!=''">
+				AND power=#{power}
+			</if>
+			
+			<if test="selUserName!=null and selUserName!=''">
+				AND user_name LIKE '%${selUserName}%'
+			</if>
+			<if test="selphone!=null and selphone!=''">
+				AND phone LIKE '%${selphone}%'
+			</if>
+			<if test="selqq!=null and selqq!=''">
+				AND qq LIKE '%${selqq}%'
+			</if>
+			<if test="number!=null and number!=''">
+				AND (user_name=#{number} OR qq=#{number} OR
+				phone=#{number})
+			</if>
+			<if test="phone!=null and phone!=''">
+				AND phone=#{phone}
+			</if>
+		</where>
+		ORDER BY power DESC
+		<if test="isShare==1">
+			LIMIT ${startIndex},${rows} 
+		</if>
+	</select>
+	
+	
+
+	<!-- 查询用户信息Count -->
+	<select id="selectUsersCount" parameterType="user" resultType="int">
+		SELECT
+		 	COUNT(1) 
+		FROM
+			user
+		<where>
+			<if test="id!=null and id!=0">
+				id=#{id}
+			</if>
+			
+			<if test="user_name!=null and user_name!=''">
+				AND user_name=#{user_name}
+			</if>
+			<if test="qq!=null and qq!=''">
+				AND qq=#{qq}
+			</if>
+			<if test="power!=null and power!=''">
+				AND power=#{power}
+			</if>
+			<if test="selUserName!=null and selUserName!=''">
+				AND user_name LIKE '%${selUserName}%'
+			</if>
+			<if test="selphone!=null and selphone!=''">
+				AND phone LIKE '%${selphone}%'
+			</if>
+			<if test="selqq!=null and selqq!=''">
+				AND qq LIKE '%${selqq}%'
+			</if>
+			<if test="number!=null and number!=''">
+				AND (user_name=#{number} OR qq=#{number} OR
+				phone=#{number})
+			</if>
+			<if test="phone!=null and phone!=''">
+				AND phone=#{phone}
+			</if>
+		</where>
+	</select>
+
+	<!-- 修改用户信息 -->
+	<update id="updateUserPassWordById" parameterType="user">
+		UPDATE user
+		<set>
+			<if test="newpassWord!=null and newpassWord!=''">
+				password=#{newpassWord}
+			</if>
+		</set>
+		WHERE id=#{id} AND password=#{password}
+	</update>
+	
+	<!-- 修改用户信息 -->
+	<update id="updateUserByName" parameterType="user">
+		UPDATE user
+		<set>
+			<if test="password!=null and password!=''">
+				password=#{password},
+			</if>
+			<if test="qq!=null and qq!=''">
+				qq=#{qq},
+			</if>
+			<if test="phone!=null and phone!=''">
+				phone=#{phone},
+			</if>
+		</set>
+		WHERE user_name=#{user_name}
+	</update>
+	
+	<!-- 修改用户信息 -->
+	<update id="updateUserByQQ" parameterType="user">
+		UPDATE user
+		<set>
+			<if test="password!=null and password!=''">
+				password=#{password},
+			</if>
+			<if test="qq!=null and qq!=''">
+				qq=#{qq},
+			</if>
+			<if test="phone!=null and phone!=''">
+				phone=#{phone},
+			</if>
+		</set>
+		WHERE qq=#{conditions_qq}
+	</update>
+	
+	<!-- 修改用户信息 -->
+	<update id="updateUserByPhone" parameterType="user">
+		UPDATE user
+		<set>
+			<if test="password!=null and password!=''">
+				password=#{password},
+			</if>
+			<if test="qq!=null and qq!=''">
+				qq=#{qq},
+			</if>
+			<if test="phone!=null and phone!=''">
+				phone=#{phone},
+			</if>
+		</set>
+		WHERE phone=#{conditions_phone}
+	</update>
+
+
+	<!-- 删除用户信息 -->
+	<delete id="deleteUser" parameterType="user">
+		DELETE FROM user
+		WHERE id=#{id}
+	</delete>
+	
+	
+	<!-- 修改用户信息 -->
+	<update id="updateUserById" parameterType="user">
+		UPDATE user
+		<set>
+			<if test="power!=null and power!=''">
+				power=#{power},
+			</if>
+			<if test="team_id!=null and team_id!=''">
+				team_id=#{team_id},
+			</if>
+			<if test="qq!=null and qq!=''">
+				qq=#{qq},
+			</if>
+			<if test="phone!=null and phone!=''">
+				phone=#{phone},
+			</if>
+		</set>
+		WHERE id=#{id}
+	</update>
+</mapper>

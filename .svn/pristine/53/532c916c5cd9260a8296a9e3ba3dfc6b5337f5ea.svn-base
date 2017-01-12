@@ -1,0 +1,120 @@
+ul.table-header, ul.list-table, ul.list-table ul, ul.table-header li, ul.list-table li{
+    margin: 0;
+    padding: 0;
+}
+ul.table-header, ul.list-table,  ul.list-table ul{
+    display:block;
+    list-style-type: none;
+    -webkit-margin-before: 0;
+    -webkit-margin-after: 0;
+    color: #333;
+    white-space: nowrap;
+}
+ul.table-header li, ul.list-table li{
+    display:inline-block;
+    *display: inline;
+    *zoom: 1;
+    text-align: center;
+}
+ul.list-table li a{
+    text-decoration: none;
+    color:#333;
+    font-size:1.2em;
+}
+ul.list-table li a:hover{
+    color: #4A6A99;
+    text-decoration: none;
+}
+.loading{
+    text-align: center;
+    padding: 2em;
+    font-size: 1.2em;
+    word-spacing: .1em;
+    background: url(../images/loading.gif) 50% 100% no-repeat;
+}
+.loading span{
+    visibility: hidden;
+}
+ul.table-header{
+    background-color: #ffe48d;
+    position: fixed;
+    width: 86.1%;
+    top: 4.9em;
+    z-index:2;
+    opacity: 1;
+}
+
+ul.table-header li{
+    padding: .5em 0;
+    width: 9%;
+    font-size: 1.2em;
+    cursor: pointer;
+}
+ul.table-header li:after{
+    content: '\25BD';
+    position: relative;
+    top: 2px;
+    visibility: hidden;
+    color: #D5572A;
+}
+ul.table-header li.desc:after{
+    content: '\25BD';
+    visibility: visible;
+}
+ul.table-header li.asc:after{
+    content: '\25B3';
+    visibility: visible;
+}
+ul.table-header li.first-child,ul.table-header li.last-child{
+    width:12.5%;
+}
+ul.table-header li.first-child{
+    cursor: default;
+    pointer-events: none;
+}
+ul.list-table{
+    margin-top: 2.4em;
+}
+ul.list-table li{
+   display: block;
+}
+/**
+  lever two list
+*/
+
+ul.list-table li ul{
+    display: block;
+}
+ul.list-table li ul li{
+    display: inline-block;
+    *display: inline;
+    *zoom: 1;
+    width: 9%;
+    padding: .5em 0;
+}
+ul.list-table li li.last-child, ul.list-table li li.first-child{
+    width: 14%;
+}
+ul.list-table li.even{
+    background-color: #e0ecff;
+}
+ul.list-table > li.last-child{
+    background-color:#5A9FE2;
+    position: fixed;
+    width: 86.1%;
+    bottom: 2.3em;
+}
+ul.list-table li.last-child li, ul.list-table li.last-child a{
+    color:#fff;
+}
+
+#btnexport{
+    position: absolute;
+    top: .3em;
+    right: 1em;
+}
+#btnreturn{
+    position: absolute;
+    right: 9em;
+    top: .3em;
+}

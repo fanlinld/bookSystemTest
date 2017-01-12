@@ -1,0 +1,4 @@
+*{font-size:15px; font-family:Tahoma,Verdana,Î¢ÈíÑÅºÚ,ĞÂËÎÌå; font-color:gray}
+body{background:#D2E0F2; }
+a{ color:Black; text-decoration:none;}
+a:hover{ color:Red; text-decoration:underline;}
