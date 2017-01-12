@@ -29,7 +29,6 @@ import com.util.JsonUtil;
  */
 @Component("book")
 public class BookController extends HttpServlet {
-
 	private static final long serialVersionUID = 7113130751016094624L;
 	@Autowired(required=true)
 	private BookService bookService;

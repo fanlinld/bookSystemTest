@@ -39,9 +39,7 @@ public class BookInfoExport extends HttpServlet {
 		Book book=(Book)JsonUtil.getJsonToObject(param.toString(), Book.class);
         // 生成xls     
 		try{
-			
 			List<Book> booklist=bookDao.selectBooks(book);
-			
 			// 新建一张表    
 			String filename ="书籍信息汇总"+CommonUtil.getDateDayFormat2();
 			filename = new String(filename.getBytes(), "ISO8859-1");
