@@ -254,6 +254,7 @@
 			readnote
 		WHERE
 			bookid=#{bookid}
+		ORDER BY modifydate DESC,createdate DESC
 	</select>
 
 	<!--添加读书笔记 -->
