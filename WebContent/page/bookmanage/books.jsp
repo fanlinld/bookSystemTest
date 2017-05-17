@@ -332,7 +332,7 @@
         	$('#brand').textbox('setValue', row.brand);
         	$('#buydate').textbox('setValue', row.buydate);
         	if(row.image!=null && row.image!=""){
-        		$('#preview').attr('src','http://172.16.1.92:8080/bookManage/cover/'+row.image);
+        		$('#preview').attr('src',row.image);
         	}else{
         		$("#preview").attr("src","../../images/20150709165046.png");
         	}

@@ -17,6 +17,7 @@ import com.book.dto.OutBook;
 import com.book.dto.ReadNote;
 import com.util.CommonUtil;
 import com.util.JsonUtil;
+import com.util.PropertiesUtil;
 import com.util.SharePage;
 import com.util.Util;
 
@@ -38,6 +39,11 @@ public class BookServiceImpl implements BookService{
 			book.setIsShare(1);//需要分页
 			Integer maxCount=bookDao.selectBookCount(book);
 			book.setMaxCount(maxCount);
+			List<Book> list=bookDao.selectBooks(book);
+			String path = PropertiesUtil.readServerConfigValue("BOOKMARK.COVER.IMGAGE.PATH").toString();
+			for(int i=0;i<list.size();i++){
+				list.get(i).setImage("/"+path+list.get(i).getImage());
+			}
 			root=SharePage.getSharePageContext(bookDao.selectBooks(book),book);
 		} catch (Exception e) {
 			e.printStackTrace();

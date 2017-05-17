@@ -9,7 +9,7 @@
 	</appender>
 	<!-- 输出异常日志到文件 -->
 	<appender class="org.apache.log4j.DailyRollingFileAppender" name="errorFile">
-		<param name="File" value="${lftResPlatform.root}/logs/errorFile.log"></param>  
+		<param name="File" value="D:/logs/errorFile.log"></param>  
         <param name="Threshold" value="ERROR"></param> 
         <param name="Append" value="true" /> 
         <param name="DatePattern" value="'.'yyyy-MM-dd"></param>
